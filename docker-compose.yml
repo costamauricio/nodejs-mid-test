@@ -1,0 +1,14 @@
+version: '2'
+services:
+  api:
+    image: node:alpine
+    volumes:
+      - .:/home/app
+    working_dir: /home/app
+    ports:
+      - 8081:80
+    environment:
+      NODE_PORT: 80
+    entrypoint:
+      - npm
+      - start

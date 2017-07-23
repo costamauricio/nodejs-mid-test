@@ -9,6 +9,14 @@ services:
       - 8081:80
     environment:
       NODE_PORT: 80
+      MONGO_HOST: "storage"
+      MONGO_PORT: 27017
+      MONGO_DB_NAME: "api"
     entrypoint:
       - npm
       - start
+  storage:
+    image: mongo:latest
+    command: mongod
+    ports:
+     - "27017:27017"

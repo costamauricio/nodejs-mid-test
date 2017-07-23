@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "NodeJS REST API",
   "main": "index.js",
+  "engines": {
+    "node": ">=7.6"
+  },
   "scripts": {
-    "start": "node index.js",
+    "start": "NODE_PATH=. node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "./node_modules/.bin/eslint index.js api/* config/* db/*"
   },
@@ -19,9 +22,14 @@
   },
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.17.2",
+    "celebrate": "^4.0.1",
+    "cors": "^2.8.4",
     "dotenv": "^4.0.0",
     "express": "^4.15.3",
-    "import-dir": "0.0.1"
+    "import-dir": "0.0.1",
+    "joi": "^10.6.0",
+    "monk": "^6.0.1"
   },
   "devDependencies": {
     "eslint": "^4.3.0"

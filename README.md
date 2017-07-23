@@ -1,5 +1,45 @@
 # NodeJS resource api Proof-Of-Concept (PoC)
 
+## Requirements
+
+* NodeJS >= 7.6
+* MongoDB
+
+## Installing
+
+* clone this repo
+* cd path/to/this/repo && npm install
+
+## Configuring
+
+Create a .env file with the following options:
+
+```
+# server
+NODE_ENV=(development|production)
+NODE_PORT=8081 # port where the server will listen
+
+# Throttle feature
+THROTTLE_FEATURE=(any value to enable)
+THROTTLED_DEVICES=12jHUD7890,jjKhdg887 #comma separated devices id, it will be used only if throttle feature is enabled
+
+# database (all required)
+MONGO_HOST=
+MONGO_PORT=
+MONGO_DB_NAME=
+
+```
+
+## Running with docker
+
+* docker-compose up
+
+## Running without docker
+
+* npm start
+
+---
+
 The goal of this test is to apply some basic concepts of a resource API using NodeJS stack.
 
 ## PoC Goal requirements

@@ -3,17 +3,19 @@ process.env.MONGO_DB_NAME = 'api-test';
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
+const expect = chai.expect;
 
 const server = require('../index');
-const db = require('db');
+const config = require('config');
+const db = require('monk')(`${config.db.host}:${config.db.port}/${config.db.name}`);
 
 chai.use(chaiHttp);
 
-describe('devices', () => {
+describe('devices endpoint', () => {
 
   // Clear devices collection
   beforeEach((done) => {
-    db.getCollection('devices').remove({}).then(() => { done() });
+    db.get('devices').remove({}).then(() => { done() });
   });
 
   describe('GET /devices', () => {
@@ -32,7 +34,7 @@ describe('devices', () => {
         }
       ];
 
-      db.getCollection('devices').insert(devices).then(() => {
+      db.get('devices').insert(devices).then(() => {
 
         chai.request(server)
           .get('/devices')
@@ -58,7 +60,7 @@ describe('devices', () => {
         name: 'First device'
       };
 
-      db.getCollection('devices').insert(device).then(() => {
+      db.get('devices').insert(device).then(() => {
 
         chai.request(server)
           .get('/devices/' + device._id)
@@ -77,7 +79,7 @@ describe('devices', () => {
       });
     });
 
-    it('should not found a device', (done) => {
+    it('should GET and return status code 404', (done) => {
 
       chai.request(server)
         .get('/devices/109838339201')
@@ -87,7 +89,11 @@ describe('devices', () => {
         });
     });
 
-    it('should include a device', (done) => {
+  });
+
+  describe('POST /devices', () => {
+
+    it('should POST to /devices and include a device', (done) => {
       let device = {
         serialNumber: '998aAIo3dd664',
         deviceId: '88923jdKSid8',
@@ -101,38 +107,55 @@ describe('devices', () => {
 
           res.should.have.status(200);
 
-          chai.request(server)
-            .get('/devices')
-            .end((err, res) => {
+          db.get('devices').find().then((data) => {
 
-              res.should.have.status(200);
-              res.body.should.be.a('array');
-              res.body.length.should.be.eql(1);
-              done();
-            });
+            expect(data).to.be.a('array');
+            expect(data.length).to.be.eql(1);
+            expect(data[0]).to.include(device);
+
+            done();
+          });
         });
     });
 
-    it('should not include the device', (done) => {
+    it('should POST to /devices and return status code 400 with invalid deviceId', (done) => {
       let device = {
         serialNumber: '998aAIo3dd664',
         deviceId: '88923jdKSid8',
         name: 'First device'
       };
 
-      db.getCollection('devices').insert(Object.create(device)).then(() => {
+      db.get('devices').insert(Object.create(device)).then(() => {
 
         chai.request(server)
           .post('/devices')
           .send(device)
           .end((err, res) => {
-            
+
             res.should.have.status(400);
             res.body.should.be.a('object');
             res.body.should.have.property('deviceId');
             done();
           });
       });
+    });
+
+    it('should POST to /devices and return status code 400 with invalid schema', (done) => {
+
+      let device = {
+        deviceId: '88923jdKSid8',
+        name: 'First device'
+      };
+
+      chai.request(server)
+        .post('/devices')
+        .send(device)
+        .end((err, res) => {
+
+          res.should.have.status(400);
+          res.body.should.be.a('object');
+          done();
+        });
     });
   });
 });

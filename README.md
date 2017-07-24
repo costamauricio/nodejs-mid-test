@@ -5,12 +5,12 @@
 * NodeJS >= 7.6
 * MongoDB
 
-## Installing
+## Install
 
 * clone this repo
 * cd path/to/this/repo && npm install
 
-## Configuring
+## Config
 
 Create a .env file with the following options:
 
@@ -30,11 +30,11 @@ MONGO_DB_NAME=
 
 ```
 
-## Running with docker
+## Run with docker
 
 * docker-compose up
 
-## Running without docker
+## Run without docker
 
 * npm start
 

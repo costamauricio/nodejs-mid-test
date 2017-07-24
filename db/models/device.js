@@ -22,12 +22,13 @@ module.exports = {
   },
 
   async findById(id) {
+
     // verify if the id is a valid objectId
     if (!ObjectID.isValid(id))
       return null;
 
-    let data = await db.getCollection('devices').findOne({ _id : id });
-
+    let data = await db.getCollection('devices').findOne({ _id : (new ObjectID(id)) });
+    
     if (!data)
       return null;
 

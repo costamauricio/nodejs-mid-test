@@ -9,7 +9,7 @@
   "scripts": {
     "start": "NODE_PATH=. node index.js",
     "test": "NODE_PATH=. mocha test/*",
-    "lint": "./node_modules/.bin/eslint index.js api/* config/* db/*"
+    "lint": "./node_modules/.bin/eslint index.js api/* config/* db/* tests/*"
   },
   "repository": {
     "type": "git",
